@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!-- This site was created in Webflow. https://www.webflow.com -->
+<!-- Last Published: Thu May 02 2024 12:21:09 GMT+0000 (Coordinated Universal Time) -->
+<html data-wf-domain="select-city.webflow.io" data-wf-page="663372b9b4c53cc693e6e477"
+    data-wf-site="6632796a2e2b4b02e906078c">
+
+<head>
+    <meta charset="utf-8" />
+    <title>FinishOrder</title>
+    <meta content="FinishOrder" property="og:title" />
+    <meta content="FinishOrder" property="twitter:title" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link href="https://assets-global.website-files.com/6632796a2e2b4b02e906078c/css/select-city.webflow.ad08d1a67.css"
+        rel="stylesheet" type="text/css" />
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const products = params.get('products'); // Preuzimanje proizvoda iz query stringa
+            return products ? products.split(',') : [];
+        }
+
+        function getQueryCena() {
+            const params = new URLSearchParams(window.location.search); // Inicijalizacija objekta za rad sa query parametrima
+            const totalPrice = params.get('totalPrice'); // Preuzimanje vrednosti parametra 'totalPrice'
+
+            return totalPrice ? parseFloat(totalPrice) : 0; // Vraća preuzetu cenu ili zadatu vrednost (10)
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const totalPrice = document.getElementById('sumPrice');
+            totalPrice.textContent = getQueryCena() + " dinara";
+
+            const totalPricePhone = document.getElementById('sumPricePhone');
+            totalPricePhone.textContent = getQueryCena() + " dinara";
+
+            const productList = document.getElementById('product-list'); // Dohvati ul element
+            const productListPhone = document.getElementById('product-list-phone'); // Dohvati ul element
+            const productNames = getQueryParams(); // Preuzmi proizvode iz query parametara
+            // Očisti postojeće stavke u slučaju da treba zamijeniti sadržaj
+            productList.innerHTML = '';
+            productListPhone.innerHTML = '';
+            // Dodaj svaki proizvod kao stavku u listi
+            productNames.forEach(product => {
+                const listItem = document.createElement('li'); // Kreiraj novi li element
+                listItem.textContent = product; // Dodijeli naziv proizvoda kao sadržaj
+                productList.appendChild(listItem); // Dodaj u ul
+            });
+
+            productNames.forEach(product => {
+                const listItem = document.createElement('li'); // Kreiraj novi li element
+                listItem.textContent = product; // Dodijeli naziv proizvoda kao sadržaj
+                productList.appendChild(listItem); // Dodaj u ul
+                productListPhone.appendChild(listItem); // Dodaj u ul
+            });
+
+
+        });
+        function finishOrder() {
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const napomena = document.getElementById('napomena').value;
+            const products = getQueryParams(); // Lista proizvoda iz query parametara
+
+            // Generirajte objekt s ispravnim formatom
+            const data = {
+                firstName,
+                lastName,
+                address,
+                phone,
+                email,
+                napomena,
+                products, // Ovdje osigurajte da se koristi dvostruki navodnik prilikom slanja podataka
+            };
+
+            console.log("Products (as JSON):", JSON.stringify(products)); // Za ispravan prikaz s dvostrukim navodnicima
+            console.log("Data object (as JSON):", JSON.stringify(data)); // Ispisuje objekt kao JSON
+
+
+            fetch('https://serveremail-vxm8.onrender.com/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Osigurajte da je JSON format
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Uspešno poslano:', data);
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Greška pri slanju:', error);
+                    alert('Došlo je do greške pri slanju porudžbine. Pokušajte ponovo.');
+                });
+        }
+        
+    </script>
+
+</head>
+
+<body>
+    <div class="div-block">
+        <img src="https://assets-global.website-files.com/6632796a2e2b4b02e906078c/663279b88eb2f5731d26942d_cvece.jpg"
+            loading="lazy" sizes="(max-width: 479px) 50vw, (max-width: 767px) 30vw, (max-width: 991px) 15vw, 10vw"
+            srcset="https://assets-global.website-files.com/6632796a2e2b4b02e906078c/663279b88eb2f5731d26942d_cvece-p-500.jpg 500w, https://assets-global.website-files.com/6632796a2e2b4b02e906078c/663279b88eb2f5731d26942d_cvece-p-800.jpg 800w, https://assets-global.website-files.com/6632796a2e2b4b02e906078c/663279b88eb2f5731d26942d_cvece.jpg 846w"
+            alt="" class="image" />
+    </div>
+    <div class="maindiv w-clearfix">
+        <div class="formdiv">
+            <div class="w-form">
+                <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form-2"
+                    data-wf-page-id="663372b9b4c53cc693e6e477"
+                    data-wf-element-id="d774b7de-e2cb-1ee7-dac5-ba3bb05b7624">
+
+                    <label for="first-name">Ime</label>
+                    <input class="text-field-6 w-input" maxlength="256" name="first-name"
+                        placeholder="Unesite svoje ime" type="text" id="first-name" required autocomplete="given-name"/>
+
+                    <label for="last-name">Prezime</label>
+                    <input class="text-field-5 w-input" maxlength="256" name="last-name" placeholder="Unesite prezime"
+                        type="text" id="last-name" required autocomplete="family-name"/>
+
+                    <label for="phone">Telefon</label>
+                    <input class="text-field-4 w-input" maxlength="256" name="phone"
+                        placeholder="Unesite svoj broj telefona" type="tel" id="phone" required autocomplete="tel" />
+
+                    <label for="address">Adresa dostave</label>
+                    <input class="text-field-3 w-input" maxlength="256" name="address"
+                        placeholder="Unesite adresu za dostavu" type="text" id="address" required autocomplete="street-address"/>
+
+                    <label for="email">Email</label>
+                    <input class="text-field-2 w-input" maxlength="256" name="email" placeholder="Unesite svoj email"
+                        type="email" id="email" required autocomplete="email"/>
+
+                    <label for="napomena">Napomena</label>
+                    <input class="text-field w-input" maxlength="256" name="napomena" placeholder="" type="text"
+                        id="napomena" />
+
+                    <div class="porudzbinaphone">
+                        <div class="text-block-5">Izabrani proizvodi:</div>
+                        <ul role="list" class="w-list-unstyled" id="product-list-phone">
+                        </ul>
+                        <div class="text-block-6">Ukupan iznos:</div>
+                        <div class="text-block-7" id="sumPricePhone"></div>
+                    </div>
+                    <div class="buttondiv w-clearfix">
+                        <input type="submit" data-wait="Please wait..." class="submit-button-2 w-button" value="Poruci"
+                            onclick="finishOrder()" />
+                        <input type="submit" data-wait="Please wait..." class="submit-button-3 w-button" value="Nazad"
+                            onclick="window.history.back();" />
+                    </div>
+                </form>
+                <div class="w-form-done">
+                    <div>Thank you! Your submission has been received!</div>
+                </div>
+                <div class="w-form-fail">
+                    <div>Oops! Something went wrong while submitting the form.</div>
+                </div>
+            </div>
+        </div>
+        <div class="porudzbina">
+            <div class="text-block-5">Izabrani proizvodi:</div>
+            <ul role="list" class="w-list-unstyled" id="product-list">
+            </ul>
+            <div class="text-block-6">Ukupan iznos:</div>
+            <div class="text-block-7" id="sumPrice">3000 dinara</div>
+        </div>
+    </div>
+
+    <section class="footer-dark-2">
+        <div class="container">
+            <div class="footer-wrapper">
+                <a href="#" class="footer-brand w-inline-block">
+                    <img src="https://assets-global.website-files.com/62434fa732124a0fb112aab4/62434fa732124a332512aaee_placeholder-1.svg"
+                        loading="lazy" alt="" />
+                </a>
+                <div class="footer-content">
+                    <div id="w-node-_95b4ee59-4e74-415c-7009-f8b3f0328f77-93e6e477" class="footer-block">
+                        <div class="title-small">Company</div>
+                        <a href="#" class="footer-link">Pricing</a>
+                        <a href="#" class="footer-link">Docs</a>
+                    </div>
+                    <div id="w-node-_95b4ee59-4e74-415c-7009-f8b3f0328f7e-93e6e477" class="footer-block">
+                        <div class="title-small">Resources</div>
+                        <a href="#" class="footer-link">Blog post name list goes here</a>
+                        <a href="#" class="footer-link">Blog post name list goes here</a>
+                        <a href="#" class="footer-link">Blog post name list goes here</a>
+                    </div>
+                    <div id="w-node-_95b4ee59-4e74-415c-7009-f8b3f0328f87-93e6e477" class="footer-block">
+                        <div class="title-small">About</div>
+                        <a href="#" class="footer-link">Terms &amp;Conditions</a>
+                        <a href="#" class="footer-link">Privacy policy</a>
+                        <div class="footer-social-block">
+                            <a href="#" class="footer-social-link w-inline-block">
+                                <img src="https://assets-global.website-files.com/62434fa732124a0fb112aab4/62434fa732124ac15112aad5_twitter%20small.svg"
+                                    loading="lazy" alt="" class="image-2 sociallink" />
+                            </a>
+                            <a href="#" class="footer-social-link w-inline-block">
+                                <img src="https://assets-global.website-files.com/62434fa732124a0fb112aab4/62434fa732124a389912aad8_linkedin%20small.svg"
+                                    loading="lazy" alt="" class="sociallink" />
+                            </a>
+                            <a href="#" class="footer-social-link w-inline-block">
+                                <img src="https://assets-global.website-files.com/62434fa732124a0fb112aab4/62434fa732124a51bf12aae9_facebook%20small.svg"
+                                    loading="lazy" alt="" class="sociallink" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-copyright-center">Copyright © 2021 Company name</div>
+    </section>
+
+
+</html>
